@@ -1,0 +1,5 @@
+<decorators defaultdir="/WEB-INF/views/decorators">
+    <decorator name="indexAccess" page="indexAccess.jsp">
+          <pattern>/*</pattern>
+    </decorator>
+</decorators>
