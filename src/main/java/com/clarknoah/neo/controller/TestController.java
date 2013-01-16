@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.clarknoah.neo.domain.*;
 import com.clarknoah.neo.relationship.RelTime;
 import com.clarknoah.neo.repository.*;
-//import com.clarknoah.neo.service.GoogleCalendarService;
-//import com.clarknoah.neo.service.GoogleContactsService;
+import com.clarknoah.neo.service.GoogleCalendarService;
+import com.clarknoah.neo.service.GoogleContactsService;
 import com.clarknoah.neo.service.PeopleService;
 import com.clarknoah.neo.service.TimeService;
-//import com.google.gdata.util.AuthenticationException;
-//import com.google.gdata.util.ServiceException;
+import com.google.gdata.util.AuthenticationException;
+import com.google.gdata.util.ServiceException;
 import com.google.gson.*;
 
 @Controller
@@ -333,7 +333,7 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/initialize", method = RequestMethod.GET)
-	public String initialize(Model model){
+	public String initialize(Model model) throws ServiceException, IOException {
 		//String noah = randomColor();
 		//GoogleContactsService test = new GoogleContactsService();
 		
