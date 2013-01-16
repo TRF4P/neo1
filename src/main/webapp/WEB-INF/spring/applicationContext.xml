@@ -37,7 +37,7 @@
   
 	<neo4j:config graphDatabaseService="graphDatabaseService"/>
     <bean id="graphDatabaseService" class="org.springframework.data.neo4j.rest.SpringRestGraphDatabase" scope="singleton">
-         <constructor-arg index="0" value="http://ec2-184-73-8-7.compute-1.amazonaws.com:7474/db/data" />
+         <constructor-arg index="0" value="http://localhost:7474/db/data" />
     </bean>
    
 	<tx:annotation-driven mode="proxy" transaction-manager="transactionManager"/>	
