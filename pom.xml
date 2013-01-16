@@ -6,7 +6,7 @@
 	<artifactId>neo</artifactId>
 	<version>2.1.0.BUILD-SNAPSHOT</version>
 	<packaging>war</packaging>
-
+	<!-- This is the updated version -->
 	<name>neo</name>
 
 	<properties>
