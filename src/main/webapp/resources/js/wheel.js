@@ -33,6 +33,8 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.max(0, d.y ? y(d.y) : d.y); })
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
+var nodeId = $("#nodeId").text;
+
 d3.json("/jsonRequestOrg", function(json) {
   var nodes = partition.nodes({children: json});
 
