@@ -44,7 +44,7 @@ prefix="form"%>
         </tr>
 <tr>
         <td>Node Id</td>
-        <td>${nodeId}</td>
+        <td id="nodeId">${nodeId}</td>
         </tr>
 <tr>
         <td>Last Modified</td>
@@ -55,6 +55,12 @@ prefix="form"%>
         <td>${firstCreated}</td>
     </tr>
 </table>  
+<div id="vis"><img src="wheel.png"></div>
+<script src="/resources/js/d3.v2.min.js"></script>
+<script src="/resources/js/wheel.js"></script>
+<script>
+	if (top != self) top.location.replace(location);
+</script>
 <form action="/delete/${nodeId}" method="get">
 <button type="submit">Delete Node</button><br>
 </form>
