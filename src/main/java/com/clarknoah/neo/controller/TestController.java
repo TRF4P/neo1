@@ -316,11 +316,11 @@ public class TestController {
 		System.out.println(suggestions.toString());
 		return suggestions.toString();
 	}
-	@RequestMapping(value = "/jsonRequestOrg", method = RequestMethod.GET)
-	public @ResponseBody String jsonRequestOrg(Model model) {
+	@RequestMapping(value = "/jsonRequestOrg/{nodeId}", method = RequestMethod.GET)
+	public @ResponseBody String jsonRequestOrg(@PathVariable long nodeId, Model model) {
 		
 	
-		long id = 5;
+		long id = nodeId;
 		Organization org = orgRepo.findOne(id);
 		Organization rootOrg = org;
 		JsonObject masterObject = sunburstObject(org);
