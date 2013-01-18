@@ -17,6 +17,7 @@ import com.clarknoah.neo.service.TimeService;
 
 //import com.clarknoah.neo.controller.HomeController;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -31,6 +32,8 @@ public class People extends Master {
 	Long nodeId;
 	@Indexed
 	private String firstName;
+	
+	
 	@Indexed
 	private String lastName;
 	@Indexed
@@ -50,6 +53,9 @@ public class People extends Master {
 	@RelatedTo(type = "works_at", direction = Direction.OUTGOING)
 	Organization worksAt;
 
+	@RelatedTo(type = "address_of", direction = Direction.INCOMING)
+	Set<Email> addressOf;
+	
 	@RelatedTo(type = "works_under", direction = Direction.OUTGOING)
 	People worksUnder;
 
@@ -83,8 +89,18 @@ public class People extends Master {
 		return friendsWith;
 	}
 
+
 	public void setFriendsWith(People person) {
 		friendsWith.add(person);
+	}
+	
+	public Set<Email> getAddressOf() {
+		return addressOf;
+	}
+
+
+	public void setAddressOf(Email email) {
+		addressOf.add(email);
 	}
 
 	public Organization getWorksAt() {

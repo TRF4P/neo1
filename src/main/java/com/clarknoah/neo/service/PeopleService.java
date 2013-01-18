@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.clarknoah.neo.domain.*;
+import com.clarknoah.neo.repository.EmailRepository;
 import com.clarknoah.neo.repository.EventRepository;
 import com.clarknoah.neo.repository.OrganizationRepository;
 import com.clarknoah.neo.repository.PeopleRepository;
@@ -32,6 +33,8 @@ public class PeopleService {
 	private PeopleRepository peopleRepository;	
 	@Autowired
 	private TimeRepository timeRepository;
+	@Autowired
+	private EmailRepository emailRepo;
 
 	public PeopleService(){
 	}
@@ -57,6 +60,7 @@ public class PeopleService {
 		return person;
 	}
 	
+	
 	@Transactional
 	public Organization createEntity(Organization object) {
 		Organization person = orgRepo.save(object);
@@ -70,6 +74,13 @@ public class PeopleService {
 		time(person);
 		return person;
 	}
+	@Transactional
+	public Email createEntity(Email object) {
+		Email person = emailRepo.save(object);
+		time(person);
+		return person;
+	}
+	
 	
 	
 	@Transactional

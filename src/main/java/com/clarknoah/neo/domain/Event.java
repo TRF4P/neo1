@@ -57,8 +57,6 @@ public Event(){
 	}
 
 
-
-
 	public String getNodeType() {
 		return nodeType;
 	}
@@ -67,31 +65,18 @@ public Event(){
 	}
 
 
-
-
-
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
-
-
-
 
 
 	public Date getEventStart() {
 		return eventStart;
 	}
 
-
-
-
-
 	public void setEventStart(Date eventStart) {
 		this.eventStart = eventStart;
 	}
-
-
-
 
 
 	public Date getEventEnd() {
@@ -99,15 +84,9 @@ public Event(){
 	}
 
 
-
-
-
 	public void setEventEnd(Date eventEnd) {
 		this.eventEnd = eventEnd;
 	}
-
-
-
 
 
 	public Long getNodeId() {

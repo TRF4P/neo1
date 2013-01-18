@@ -1,6 +1,9 @@
 package com.clarknoah.neo.service;
 
 import com.clarknoah.neo.domain.Event;
+import com.clarknoah.neo.domain.Email;
+import com.clarknoah.neo.domain.People;
+import com.clarknoah.neo.repository.EmailRepository;
 import com.clarknoah.neo.repository.EventRepository;
 import com.clarknoah.neo.repository.OrganizationRepository;
 import com.clarknoah.neo.repository.PeopleRepository;
@@ -23,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,9 +44,12 @@ public class GoogleCalendarService {
 	@Autowired
 	private TimeRepository timeRepository;
 	@Autowired
+	private EmailRepository emailRepo;
+	@Autowired
 	private PeopleService pplServ;
 	public static CalendarService myService;
 	
+	public Set<People> attendeeSet;
 	public static void setService() throws AuthenticationException{
 		myService = new CalendarService("exampleCo-exampleApp-1");
 		myService.setUserCredentials("noahbc08@gmail.com", "**********");
@@ -63,7 +70,7 @@ public class GoogleCalendarService {
     }
     
     public void getEvents() throws IOException, ServiceException{
-    
+    	//attendeeSet = null;
     	// Set up the URL and the object that will handle the connection:
     	URL feedUrl = new URL("https://www.google.com/calendar/feeds/default/private/full");
     	CalendarQuery myQuery = new CalendarQuery(feedUrl);
@@ -74,13 +81,36 @@ public class GoogleCalendarService {
     	List<CalendarEventEntry> calList = myFeed.getEntries();
     	Iterator<CalendarEventEntry> eventIt = calList.iterator();
     	while(eventIt.hasNext()){
+    		System.out.println("");
+    		System.out.println("-----------------Event------------------");
     		//eventIt.next().getPlainTextContent();
     		CalendarEventEntry current = eventIt.next();
     		Iterator<When> times = current.getTimes().iterator();
+    		System.out.println("ICalUID "+current.getIcalUID());
+    		System.out.println("Id "+current.getId());
+    		System.out.println("eTag "+current.getEtag());
+    		Iterator<EventWho> attendees = current.getParticipants().iterator();   	
+    		while(attendees.hasNext()){
+    			EventWho currentAttendee = attendees.next();
+    			System.out.println("Participant Email: "+currentAttendee.getEmail());   			
+    			
+    			System.out.println("Participant Status:  "+currentAttendee.getAttendeeStatus());
+    			System.out.println("Participant Attendee type: "+currentAttendee.getAttendeeType());
+    			System.out.println("Participant String Value: "+currentAttendee.getValueString());
+    			System.out.println("Participant Rel: "+currentAttendee.getRel());
+    			System.out.println("");
+    			Email currentEmail = emailRepo.findByPropertyValue("email", currentAttendee.getEmail());
+    			if (currentEmail != null && currentEmail.getAddressOf().getNodeId() != null){
+    				attendeeSet.add(peopleRepository.findOne(currentEmail.getAddressOf().getNodeId()));
+    			}
+    			
+    			//People currentPerson = peopleRepository.findOne(attendeeId); 		
+    		}
     		
+    		//If the specific calendar entry has a title, do this:
     		if(current.getTitle().getPlainText().isEmpty()==false){
     			
-    		System.out.println(current.getTitle().getPlainText());
+    		System.out.println("title: "+current.getTitle().getPlainText());
     		}
     		if(current.getPlainTextContent().isEmpty()==false){
     		System.out.println(current.getPlainTextContent());  		
@@ -112,9 +142,21 @@ public class GoogleCalendarService {
 					}
 				}
     			Event eventEnt = new Event(current.getTitle().getPlainText(), startDate, endDate);
-    			pplServ.createEntity(eventEnt);
-    			Date df = new Date();
-    			System.out.println(df.toString());
+    		//	eventEnt.set
+    			eventEnt = pplServ.createEntity(eventEnt);
+    			if(attendeeSet != null){
+    			Iterator<People> pplIt = attendeeSet.iterator();
+    			while(pplIt.hasNext())
+    				{
+    				People thisPpl = pplIt.next();
+    				 thisPpl.setAttended(eventEnt);
+    				 pplServ.createEntity(thisPpl);
+    				}
+    			}
+    			else
+    				{
+    				System.out.println("No found attendees");
+    				}
     		}
     	}
     }

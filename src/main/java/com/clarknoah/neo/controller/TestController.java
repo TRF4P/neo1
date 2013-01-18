@@ -336,9 +336,17 @@ public class TestController {
 	@RequestMapping(value = "/initialize", method = RequestMethod.GET)
 	public String initialize(Model model) throws ServiceException, IOException, ParseException {
 		//String noah = randomColor();
-		//GoogleContactsService test = new GoogleContactsService();
+		GoogleContactsService test = new GoogleContactsService();
 			
+		//Email newEmail = new Email("noahbc08@gmail.com");
+		//long noah = 1;
+		//newEmail.setAddressOf(peepRepo.findOne(noah));
+		//pplServ.createEntity(newEmail);
 		
+		//People noah = new People(23, "Noah","Clark");		
+		//noah.setEmailList("noahbc08@gmail.com");
+		//pplServ.createEntity(noah);
+		//System.out.println(noah.getNodeId().toString());
 		calService.getCalendar();
 		calService.getEvents();
 		//test.printAllContacts(peepRepo);
