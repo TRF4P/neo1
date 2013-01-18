@@ -47,6 +47,8 @@ public class TestController {
 	private  ProjectRepository projRepo;
 	@Autowired
 	private PeopleService pplServ;
+	@Autowired
+	private GoogleCalendarService calService;
 	
 	private long timeKey = 81;
     
@@ -248,7 +250,7 @@ public class TestController {
 			 model = modelNode.getModel(model);
 		   }
 		   else if(nodeType.contains("org")){
-		   Organization modelNode = orgRepo.findOne(nodeId);
+		   Organization modelNode = orgRepo.findOne(nodeId);		 	  	   
 		   model = modelNode.getModel(model);
 		   }
 		   else if(nodeType.contains("event")){
@@ -316,11 +318,10 @@ public class TestController {
 		System.out.println(suggestions.toString());
 		return suggestions.toString();
 	}
-	@RequestMapping(value = "/jsonRequestOrg", method = RequestMethod.GET)
-	public @ResponseBody String jsonRequestOrg(Model model) {
-		
-	
-		long id = 5;
+	@RequestMapping(value = "/jsonRequestOrg/{nodeId}", method = RequestMethod.GET)
+	public @ResponseBody String jsonRequestOrg(@PathVariable long nodeId, Model model) {
+			
+		long id = nodeId;
 		Organization org = orgRepo.findOne(id);
 		Organization rootOrg = org;
 		JsonObject masterObject = sunburstObject(org);
@@ -333,14 +334,13 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/initialize", method = RequestMethod.GET)
-	public String initialize(Model model) throws ServiceException, IOException {
+	public String initialize(Model model) throws ServiceException, IOException, ParseException {
 		//String noah = randomColor();
 		//GoogleContactsService test = new GoogleContactsService();
+			
 		
-		
-		//GoogleCalendarService noah= new GoogleCalendarService();
-		//noah.getCalendar();
-		//noah.getEvents();
+		calService.getCalendar();
+		calService.getEvents();
 		//test.printAllContacts(peepRepo);
 		//long noahd =1;
 		//People noah = peepRepo.findOne(noahd);

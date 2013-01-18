@@ -18,6 +18,8 @@ import com.google.gdata.util.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -37,6 +39,8 @@ public class GoogleCalendarService {
 	private PeopleRepository peopleRepository;	
 	@Autowired
 	private TimeRepository timeRepository;
+	@Autowired
+	private PeopleService pplServ;
 	public static CalendarService myService;
 	
 	public static void setService() throws AuthenticationException{
@@ -58,13 +62,13 @@ public class GoogleCalendarService {
     	}
     }
     
-    public void getEvents() throws IOException, ServiceException {
+    public void getEvents() throws IOException, ServiceException{
     
     	// Set up the URL and the object that will handle the connection:
     	URL feedUrl = new URL("https://www.google.com/calendar/feeds/default/private/full");
     	CalendarQuery myQuery = new CalendarQuery(feedUrl);
-    	myQuery.setMinimumStartTime(DateTime.parseDateTime("2012-11-16T00:00:00"));
-    	myQuery.setMaximumStartTime(DateTime.parseDateTime("2013-01-24T23:59:59"));
+    	myQuery.setMinimumStartTime(DateTime.parseDateTime("2013-01-16T00:00:00"));
+    	myQuery.setMaximumStartTime(DateTime.parseDateTime("2013-01-23T23:59:59"));
     	// Send the request and receive the response:
     	CalendarEventFeed myFeed = myService.query(myQuery, CalendarEventFeed.class);
     	List<CalendarEventEntry> calList = myFeed.getEntries();
@@ -83,10 +87,32 @@ public class GoogleCalendarService {
     		} 
     		while(times.hasNext()){
     			When timesr = times.next();
-    			System.out.println(timesr.getStartTime().toString());
-    			System.out.println(timesr.getStartTime());
-    			System.out.println(timesr.getEndTime().toString());
-    			//Event eventEnt = new Event(current.getTitle().getPlainText(), timesr.getStartTime(), timesr.getEndTime());
+    			System.out.println(timesr.getStartTime().getValue());
+    			System.out.println(timesr.getStartTime().toUiString());
+    			Date startDate = null;
+    			Date endDate = null;
+    			try {
+					startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(timesr.getStartTime().toUiString());
+				} catch (ParseException e) {
+					try {
+						startDate = new SimpleDateFormat("yyyy-MM-dd").parse(timesr.getStartTime().toUiString());
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+    			try {
+					endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(timesr.getEndTime().toUiString());
+				} catch (ParseException e) {
+					try {
+						endDate = new SimpleDateFormat("yyyy-MM-dd").parse(timesr.getEndTime().toUiString());
+					} catch (ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+    			Event eventEnt = new Event(current.getTitle().getPlainText(), startDate, endDate);
+    			pplServ.createEntity(eventEnt);
     			Date df = new Date();
     			System.out.println(df.toString());
     		}
