@@ -18,6 +18,7 @@ import java.util.Set;
 	private Date eventStart;
 	private Date eventEnd;
 	private String nodeType = "Event";
+	
 	@GraphId Long nodeId;
 	
 	@RelatedTo(direction=Direction.OUTGOING)

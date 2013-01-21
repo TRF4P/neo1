@@ -19,7 +19,10 @@
 	<neo4j:repositories base-package="com.clarknoah.neo.repository"/>
 	
 	<bean id="peopleService" class="com.clarknoah.neo.service.PeopleService"/>
+	
 	<bean id="googleCalendarService" class="com.clarknoah.neo.service.GoogleCalendarService"/>
+	
+	<bean id="googleContactsService" class="com.clarknoah.neo.service.GoogleContactsService"/>
 	   
 	<!-- This additional config lets us use the Neo4j admin console -->     
    

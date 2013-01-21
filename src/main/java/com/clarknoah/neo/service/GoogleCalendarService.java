@@ -23,6 +23,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -48,15 +50,13 @@ public class GoogleCalendarService {
 	@Autowired
 	private PeopleService pplServ;
 	public static CalendarService myService;
-	
-	public Set<People> attendeeSet;
+	List<String> attendeeSet = new ArrayList<String>();
+
 	public static void setService() throws AuthenticationException{
 		myService = new CalendarService("exampleCo-exampleApp-1");
 		myService.setUserCredentials("noahbc08@gmail.com", "**********");
 	}
-	public GoogleCalendarService() throws AuthenticationException{
-		setService();
-	}
+
     public void getCalendar() throws IOException, ServiceException{
     	// Send the request and print the response
     	URL feedUrl = new URL("https://www.google.com/calendar/feeds/default/allcalendars/full");
@@ -69,13 +69,13 @@ public class GoogleCalendarService {
     	}
     }
     
-    public void getEvents() throws IOException, ServiceException{
-    	//attendeeSet = null;
+    public void getEvents() throws IOException, ServiceException{    	
+
     	// Set up the URL and the object that will handle the connection:
     	URL feedUrl = new URL("https://www.google.com/calendar/feeds/default/private/full");
     	CalendarQuery myQuery = new CalendarQuery(feedUrl);
-    	myQuery.setMinimumStartTime(DateTime.parseDateTime("2013-01-16T00:00:00"));
-    	myQuery.setMaximumStartTime(DateTime.parseDateTime("2013-01-23T23:59:59"));
+    	myQuery.setMinimumStartTime(DateTime.parseDateTime("2013-01-26T00:00:00"));
+    	myQuery.setMaximumStartTime(DateTime.parseDateTime("2013-01-30T23:59:59"));
     	// Send the request and receive the response:
     	CalendarEventFeed myFeed = myService.query(myQuery, CalendarEventFeed.class);
     	List<CalendarEventEntry> calList = myFeed.getEntries();
@@ -101,7 +101,7 @@ public class GoogleCalendarService {
     			System.out.println("");
     			Email currentEmail = emailRepo.findByPropertyValue("email", currentAttendee.getEmail());
     			if (currentEmail != null && currentEmail.getAddressOf().getNodeId() != null){
-    				attendeeSet.add(peopleRepository.findOne(currentEmail.getAddressOf().getNodeId()));
+    			attendeeSet.add(currentEmail.getAddressOf().getNodeId().toString());
     			}
     			
     			//People currentPerson = peopleRepository.findOne(attendeeId); 		
@@ -142,13 +142,15 @@ public class GoogleCalendarService {
 					}
 				}
     			Event eventEnt = new Event(current.getTitle().getPlainText(), startDate, endDate);
-    		//	eventEnt.set
-    			eventEnt = pplServ.createEntity(eventEnt);
+    			//eventRepo.save(eventEnt);
+    			//eventEnt = 
+    			Event savedEvent = pplServ.createEntity(eventEnt);
+    			System.out.println(savedEvent.getNodeId().toString());
     			if(attendeeSet != null){
-    			Iterator<People> pplIt = attendeeSet.iterator();
+    			Iterator<String> pplIt = attendeeSet.iterator();
     			while(pplIt.hasNext())
-    				{
-    				People thisPpl = pplIt.next();
+    			{
+    				People thisPpl = peopleRepository.findOne(new Long(pplIt.next()));
     				 thisPpl.setAttended(eventEnt);
     				 pplServ.createEntity(thisPpl);
     				}

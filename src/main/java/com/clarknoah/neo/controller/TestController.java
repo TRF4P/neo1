@@ -46,9 +46,11 @@ public class TestController {
 	@Autowired
 	private  ProjectRepository projRepo;
 	@Autowired
-	private PeopleService pplServ;
-	@Autowired
 	private GoogleCalendarService calService;
+	@Autowired
+	private GoogleContactsService contactsService;
+	@Autowired
+	private PeopleService pplServ;
 	
 	private long timeKey = 81;
     
@@ -334,10 +336,10 @@ public class TestController {
 	}
 
 	@RequestMapping(value = "/initialize", method = RequestMethod.GET)
-	public String initialize(Model model) throws ServiceException, IOException, ParseException {
+	public String initialize(Model model) throws ServiceException, IOException, ParseException, AuthenticationException {
 		//String noah = randomColor();
-		GoogleContactsService test = new GoogleContactsService();
-			
+		
+		contactsService.importAllContacts();
 		//Email newEmail = new Email("noahbc08@gmail.com");
 		//long noah = 1;
 		//newEmail.setAddressOf(peepRepo.findOne(noah));
@@ -347,8 +349,8 @@ public class TestController {
 		//noah.setEmailList("noahbc08@gmail.com");
 		//pplServ.createEntity(noah);
 		//System.out.println(noah.getNodeId().toString());
-		calService.getCalendar();
-		calService.getEvents();
+		//calService.getCalendar();
+		//calService.getEvents();
 		//test.printAllContacts(peepRepo);
 		//long noahd =1;
 		//People noah = peepRepo.findOne(noahd);

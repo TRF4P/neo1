@@ -14,16 +14,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity public class Email extends Master{
-	private String displayName;
+
+	@GraphId Long nodeId;
 	
-	@Indexed
+	@Indexed(indexType=IndexType.UNIQUE, indexName = "email")
 	private String email;
 	
-	@Indexed
 	private String emailType;
 	
 	@RelatedTo(type = "address_of", direction = Direction.OUTGOING)
 	People addressOf;
+
+	private String nodeType = "Email_Address";
 	
 	public People getAddressOf() {
 		return addressOf;
@@ -41,9 +43,8 @@ import java.util.Set;
 		this.emailType = emailType;
 	}
 
-	private String nodeType;
 	
-	@GraphId Long nodeId;
+	
 	
 	@RelatedTo(direction=Direction.OUTGOING)
 	Time lastModifiedRel;
@@ -55,6 +56,7 @@ import java.util.Set;
 	
 	public Email(String str) {
 		this.email = str;
+		this.displayName = str;
 	}
 
 

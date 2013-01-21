@@ -33,7 +33,28 @@ public class People extends Master {
 	@Indexed
 	private String firstName;
 	
+	@Indexed(indexType=IndexType.UNIQUE, indexName = "googleId")
+	private String googleId;
 	
+	@Indexed(indexType=IndexType.FULLTEXT, indexName = "birthdate")
+	private Date birthdate;
+	
+	public String getGoogleId() {
+		return googleId;
+	}
+
+	public void setGoogleId(String googleId) {
+		this.googleId = googleId;
+	}
+
+	public Date getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(Date birthdate) {
+		this.birthdate = birthdate;
+	}
+
 	@Indexed
 	private String lastName;
 	@Indexed
@@ -55,6 +76,9 @@ public class People extends Master {
 
 	@RelatedTo(type = "address_of", direction = Direction.INCOMING)
 	Set<Email> addressOf;
+	
+	@RelatedTo(type = "phone_number_of", direction = Direction.INCOMING)
+	Set<PhoneNumber> phoneNum;
 	
 	@RelatedTo(type = "works_under", direction = Direction.OUTGOING)
 	People worksUnder;
@@ -92,6 +116,15 @@ public class People extends Master {
 
 	public void setFriendsWith(People person) {
 		friendsWith.add(person);
+	}
+	
+	public Set<PhoneNumber> getPhoneNum() {
+		return phoneNum;
+	}
+
+
+	public void setPhoneNum(PhoneNumber person) {
+		phoneNum.add(person);
 	}
 	
 	public Set<Email> getAddressOf() {

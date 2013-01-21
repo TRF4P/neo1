@@ -16,6 +16,7 @@ import com.clarknoah.neo.repository.EmailRepository;
 import com.clarknoah.neo.repository.EventRepository;
 import com.clarknoah.neo.repository.OrganizationRepository;
 import com.clarknoah.neo.repository.PeopleRepository;
+import com.clarknoah.neo.repository.PhoneNumberRepository;
 import com.clarknoah.neo.repository.ProjectRepository;
 import com.clarknoah.neo.repository.TimeRepository;
 
@@ -35,6 +36,8 @@ public class PeopleService {
 	private TimeRepository timeRepository;
 	@Autowired
 	private EmailRepository emailRepo;
+	@Autowired
+	private PhoneNumberRepository numRepo;
 
 	public PeopleService(){
 	}
@@ -56,6 +59,13 @@ public class PeopleService {
 	@Transactional
 	public Event createEntity(Event object) {
 		Event person = eventRepo.save(object);
+		time(person);
+		return person;
+	}
+	
+	@Transactional
+	public PhoneNumber createEntity(PhoneNumber object) {
+		PhoneNumber person = numRepo.save(object);
 		time(person);
 		return person;
 	}
