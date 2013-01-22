@@ -338,7 +338,6 @@ public class TestController {
 	@RequestMapping(value = "/initialize", method = RequestMethod.GET)
 	public String initialize(Model model) throws ServiceException, IOException, ParseException, AuthenticationException {
 		//String noah = randomColor();
-		
 		contactsService.importAllContacts();
 		//Email newEmail = new Email("noahbc08@gmail.com");
 		//long noah = 1;

@@ -48,7 +48,7 @@ public class PeopleService {
 	}
 	
 
-	
+	@Transactional
 	public People createEntity(People object) {
 		object.setLastModified(new Date());
 		People person = peopleRepository.save(object);

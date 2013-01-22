@@ -53,7 +53,7 @@ public class GoogleContactsService {
 	private PeopleService pplServ;
 	
 	public static ContactsService myService;
-	
+	public int counter =0;
 	public GoogleContactsService(){
 		
 	}
@@ -66,9 +66,11 @@ public class GoogleContactsService {
 	public void importAllContacts() throws IOException, ServiceException{
 		//import contacts
 		setService();
+	
 		  URL feedUrl = new URL("https://www.google.com/m8/feeds/contacts/noahbc08@gmail.com/full");
 		  Query myQuery = new Query(feedUrl);
-		  myQuery.setMaxResults(6);
+		  myQuery.setMaxResults(10);
+		  
 		  ContactFeed resultFeed = myService.query(myQuery, ContactFeed.class);
 		  // Print the results
 		  System.out.println(resultFeed.getTitle().getPlainText());
@@ -82,7 +84,7 @@ public class GoogleContactsService {
 		   if(peopleRepo.findByPropertyValue("googleId", "googleId", entry.getEtag())!= null)
 			   {
 			   
-			   System.out.println(peopleRepo.findByPropertyValue("googleId", "googleId", entry.getEtag()).getNodeId().toString()+" He exists!");
+			   System.out.println(peopleRepo.findByPropertyValue("googleId", "googleId", entry.getId()).getNodeId().toString()+" He exists!");
 			   }
 
 		    else 
@@ -96,17 +98,10 @@ public class GoogleContactsService {
 	}
 	public People importContact(ContactEntry entry){
 		  People newContact = new People();
-		  
-	try {
-		System.out.println(entry.getBirthday().getWhen());
-		  System.out.println(entry.getName().toString());
-		  System.out.println(entry.getName().getGivenName().toString());
-		  System.out.println(entry.getName().getFamilyName().toString());
-	}catch (NullPointerException e){
-		System.out.println("Null pointer bitch!");
-	}
-	
-	
+		  counter++;
+		  System.out.println(counter);
+		//  System.out.println(entry.getName().getFullName().getValue().toString().isEmpty());
+		 if(entry.hasName()==true){
 		 if(entry.getBirthday()!= null){		
 			
 			try {
@@ -118,9 +113,9 @@ public class GoogleContactsService {
 			}			
 		 }
 		//  newContact.setAge()
-		 if(entry.getName().toString()!=null){
+		 if(entry.getName().getFullName().getValue().toString()!=null){
+			 System.out.println(entry.getName().getFullName().getValue().toString());
 			  newContact.setDisplayName(entry.getName().getFullName().getValue().toString());
-			  System.out.println(entry.getName().getFullName().getValue().toString());
 		 }
 
 		  if(entry.getName().getGivenName()!=null){
@@ -132,7 +127,7 @@ public class GoogleContactsService {
 			  newContact.setLastName(entry.getName().getFamilyName().getValue());
 			  System.out.println(entry.getName().getFamilyName().getValue());
 			 }
-		  newContact.setGoogleId(entry.getEtag());		  
+		  newContact.setGoogleId(entry.getId());		  
 		  
 		People commitContact = pplServ.createEntity(newContact);
 		
@@ -146,8 +141,8 @@ public class GoogleContactsService {
 				 System.out.println(thisEmail.getAddress());
 				 Email newEmail = new Email(thisEmail.getAddress());
 				 Email commitEmail = pplServ.createEntity(newEmail);
-				 commitEmail.setAddressOf(commitContact);
-				 pplServ.createEntity(commitEmail);
+				 commitContact.setAddressOf(commitEmail);
+				 pplServ.createEntity(commitContact);
 			 }
 			 	
 		 }
@@ -157,13 +152,14 @@ public class GoogleContactsService {
 			com.google.gdata.data.extensions.PhoneNumber thisNum = numbers.next();
 			 System.out.println(thisNum.getPhoneNumber());
 			 System.out.println(thisNum.getLabel());
-			 if(numRepo.findByPropertyValue("phoneNum", "phoneNum", thisNum.getPhoneNumber())== null){
-				 com.clarknoah.neo.domain.PhoneNumber newPhone = new com.clarknoah.neo.domain.PhoneNumber(thisNum.getPhoneNumber(), thisNum.getLabel());
+			 if(numRepo.findByPropertyValue("phoneNum", "phoneNum", thisNum.getPhoneNumber())== null){com.clarknoah.neo.domain.PhoneNumber newPhone = new com.clarknoah.neo.domain.PhoneNumber(thisNum.getPhoneNumber(), thisNum.getLabel());
 				 com.clarknoah.neo.domain.PhoneNumber commitNum = pplServ.createEntity(newPhone);
-				 commitNum.setPhoneNumberOf(commitContact);
+			//	 commitNum.setPhoneNumberOf(commitContact);
+				 commitContact.setPhoneNum(commitNum);
 				 pplServ.createEntity(commitNum);
 			 }
 			 	
+		 }
 		 }
 		 // newContact.setAddressOf(entry.)
 		  
@@ -179,6 +175,7 @@ public class GoogleContactsService {
 		  URL feedUrl = new URL("https://www.google.com/m8/feeds/contacts/noahbc08@gmail.com/full");
 		  Query myQuery = new Query(feedUrl);
 		  myQuery.setMaxResults(8);
+		  myQuery.setStringCustomParameter("group", "Business Contacts");
 		  ContactFeed resultFeed = myService.query(myQuery, ContactFeed.class);
 		  // Print the results
 		  System.out.println(resultFeed.getTitle().getPlainText());
