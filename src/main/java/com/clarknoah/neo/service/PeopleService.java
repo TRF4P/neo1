@@ -25,7 +25,7 @@ public class PeopleService {
 	
 
 	@Autowired
-	private OrganizationRepository orgRepo;
+	public OrganizationRepository orgRepo;
 	@Autowired
 	private EventRepository eventRepo;
 	@Autowired
@@ -38,7 +38,8 @@ public class PeopleService {
 	private EmailRepository emailRepo;
 	@Autowired
 	private PhoneNumberRepository numRepo;
-
+	public Time time = timeRepository.findOne(Static.timeNode);
+			
 	public PeopleService(){
 	}
 	
