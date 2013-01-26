@@ -32,8 +32,15 @@ var arc = d3.svg.arc()
     .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
     .innerRadius(function(d) { return Math.max(0, d.y ? y(d.y) : d.y); })
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
+<<<<<<< HEAD
 var nodeId =$("#nodeId").text();
 d3.json("/jsonRequestOrg/"+nodeId, function(json) {
+=======
+
+var nodeId = $("#nodeId").text;
+
+d3.json("/jsonRequestOrg", function(json) {
+>>>>>>> branch 'master' of https://github.com/clarknoah/neo1.git
   var nodes = partition.nodes({children: json});
 
   var path = vis.selectAll("path").data(nodes);

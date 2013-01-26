@@ -322,7 +322,12 @@ public class TestController {
 	}
 	@RequestMapping(value = "/jsonRequestOrg/{nodeId}", method = RequestMethod.GET)
 	public @ResponseBody String jsonRequestOrg(@PathVariable long nodeId, Model model) {
+<<<<<<< HEAD
 			
+=======
+		
+	
+>>>>>>> branch 'master' of https://github.com/clarknoah/neo1.git
 		long id = nodeId;
 		Organization org = orgRepo.findOne(id);
 		Organization rootOrg = org;
