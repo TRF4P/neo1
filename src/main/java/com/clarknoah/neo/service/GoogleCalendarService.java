@@ -50,11 +50,14 @@ public class GoogleCalendarService {
 	@Autowired
 	private PeopleService pplServ;
 	public static CalendarService myService;
+	
 	List<String> attendeeSet = new ArrayList<String>();
-
-	public static void setService() throws AuthenticationException{
+	public String user;
+	public String pass;
+	
+	public void setService() throws AuthenticationException{
 		myService = new CalendarService("exampleCo-exampleApp-1");
-		myService.setUserCredentials("noahbc08@gmail.com", "**********");
+		myService.setUserCredentials(user, pass);
 	}
 
     public void getCalendar() throws IOException, ServiceException{

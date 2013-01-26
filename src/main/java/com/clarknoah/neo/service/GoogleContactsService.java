@@ -51,6 +51,8 @@ public class GoogleContactsService {
 	private TimeRepository timeRepository;
 	@Autowired	
 	private PeopleService pplServ;
+	public String user;
+	public String pass;
 	
 	public static ContactsService myService;
 	public int counter =0;
@@ -58,9 +60,10 @@ public class GoogleContactsService {
 		
 	}
 	
-	public static void setService() throws AuthenticationException{
+	
+	public void setService() throws AuthenticationException{
 		myService = new ContactsService("exampleCo-exampleApp-1");
-		myService.setUserCredentials("noahbc08@gmail.com", "**********");
+		myService.setUserCredentials(user, pass);
 	}
 	
 	public void importAllContacts() throws IOException, ServiceException{
